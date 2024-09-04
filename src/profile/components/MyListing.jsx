@@ -20,6 +20,8 @@ function MyListing() {
       .where(eq(CarListing.createdBy, user?.primaryEmailAddress?.emailAddress))
       .orderBy(desc(CarListing.id));
     console.log(result);
+
+    console.log("thank you!");
   };
   return (
     <div className="mt-6">
