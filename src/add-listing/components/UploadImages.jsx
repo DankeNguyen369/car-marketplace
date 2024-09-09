@@ -6,8 +6,25 @@ import { IoIosCloseCircle } from "react-icons/io";
 import { CarImages } from "../../../configs/schema";
 // import { db } from "configs";
 import { db } from "../../../configs";
-function UploadImages({ triggleUploadImages, setLoader }) {
+// import { index, eq } from "drizzle-orm/pg-core";
+import { eq } from "drizzle-orm";
+
+function UploadImages({ triggleUploadImages, setLoader, carInfo, mode }) {
   const [selectedFileList, setSelectedFileList] = useState([]);
+  const [EditCarImageList, setEditCarImageList] = useState([]);
+  // console.log(mode);
+
+  useEffect(() => {
+    if (mode == "edit") {
+      // setEditCarImageList(car);
+      setEditCarImageList([]);
+      carInfo?.images.forEach((image) => {
+        setEditCarImageList((prev) => [...prev, image?.imageUrl]);
+        // console.log(image);
+      });
+    }
+  }, [carInfo]);
+  //
   useEffect(() => {
     if (triggleUploadImages) {
       UploadImagesToServer();
@@ -28,7 +45,15 @@ function UploadImages({ triggleUploadImages, setLoader }) {
     setSelectedFileList(result);
   };
   //   console.log(selectedFileList); //test
-
+  const onImageRemoveFromDB = async (image, index) => {
+    // console.log(carInfo?.images[index]);
+    const result = await db
+      .delete(CarImages)
+      .where(eq(CarImages.id, carInfo?.images[index]?.id))
+      .returning({ id: CarImages.id });
+    const imageList = EditCarImageList.filter((item) => item != image);
+    setEditCarImageList(imageList);
+  };
   const UploadImagesToServer = async () => {
     setLoader(true);
     await selectedFileList.forEach(async (file) => {
@@ -57,9 +82,23 @@ function UploadImages({ triggleUploadImages, setLoader }) {
     <div>
       <h2 className="font-medium text-xl my-3">Upload Car Images</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+        {mode == "edit" &&
+          EditCarImageList.map((image, index) => (
+            <div key={index}>
+              <IoIosCloseCircle
+                className="absolute m-3 text-lg text-white"
+                onClick={() => onImageRemoveFromDB(image, index)}
+              />
+              <img
+                src={image}
+                className="w-full h-[130px] object-cover rounded-xl"
+                alt=""
+                srcset=""
+              />
+            </div>
+          ))}
         {selectedFileList.map((image, index) => (
           <div key={index}>
-            {/* <h2>X</h2> */}
             <IoIosCloseCircle
               className="absolute m-3 text-lg text-white"
               onClick={() => onImageRemove(image, index)}

@@ -10,7 +10,7 @@ function Header() {
       <img src="/logo.svg" width={150} height={100} />
       <ul className="hidden md:flex gap-16">
         <li className="font-medium hover:scale-105 transition-all cursor-pointer hover:text-primary">
-          Home
+          <Link to={"/"}>Home</Link>
         </li>
         <li className="font-medium hover:scale-105 transition-all cursor-pointer hover:text-primary">
           Search

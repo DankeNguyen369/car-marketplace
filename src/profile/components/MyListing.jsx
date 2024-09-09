@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,9 +6,13 @@ import { db } from "./../../../configs";
 import { CarImages, CarListing } from "./../../../configs/schema";
 import { desc, eq } from "drizzle-orm";
 import { useUser } from "@clerk/clerk-react";
+import Service from "@/Shared/Service";
+import CarItem from "@/components/CarItem";
+import { FaTrashAlt } from "react-icons/fa";
 
 function MyListing() {
   const { user } = useUser();
+  const [carList, setCarList] = useState([]);
   useEffect(() => {
     user && GetUserCarListing();
   }, [user]);
@@ -19,8 +23,13 @@ function MyListing() {
       .leftJoin(CarImages, eq(CarListing.id, CarImages.carListingId))
       .where(eq(CarListing.createdBy, user?.primaryEmailAddress?.emailAddress))
       .orderBy(desc(CarListing.id));
-    console.log(result);
+    const resp = Service.FormatResult(result);
+    // console.log(result);
+    // console.log(resp);
+    setCarList(resp);
   };
+  console.log(carList);
+
   return (
     <div className="mt-6">
       <div className="flex justify-between items-center">
@@ -28,6 +37,27 @@ function MyListing() {
         <Link to={"/add-listing"}>
           <Button>+ Add New Listing</Button>
         </Link>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-7 gap-5">
+        {carList.map((item, index) => (
+          <div key={index}>
+            {console.log(item)}
+            <CarItem car={item} />
+            <div className="p-2 bg-gray-50 rounded-lg flex justify-between gap-3">
+              <Link
+                to={"/add-listing?mode=edit&id=" + item?.id}
+                className="w-full"
+              >
+                <Button variant="outline" className="w-full">
+                  Edit
+                </Button>
+              </Link>
+              <Button variant="destructive">
+                <FaTrashAlt />
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
