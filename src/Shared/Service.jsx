@@ -9,10 +9,17 @@ const FormatResult = (resp) => {
         images: [],
       };
     }
-    if (item.images) {
-      result[listingId].carImages.push(item.carImages);
+    if (item.carImages) {
+      result[listingId].images.push(item.carImages);
     }
   });
+  result.forEach((item) => {
+    finalResult.push({
+      ...item.car,
+      images: item.images,
+    });
+  });
+  return finalResult;
 };
 export default {
   FormatResult,

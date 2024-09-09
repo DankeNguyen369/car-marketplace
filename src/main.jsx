@@ -10,6 +10,8 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import Profile from "./profile";
 import AddListing from "./add-listing";
 import { Toaster } from "./components/ui/sonner";
+import SearchByCategory from "./search/[category]";
+import SearchByOptions from "./search";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
     path: "/add-listing",
     element: <AddListing />,
   },
+  {
+    path: "/search",
+    element: <SearchByOptions />,
+  },
+  {
+    path: "/search/:category",
+    element: <SearchByCategory />,
+  },
 ]);
 
 // Import your publishable key
@@ -42,10 +52,10 @@ if (!PUBLISHABLE_KEY) {
 }
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <RouterProvider router={router} />
-      {/* <Toaster /> */}
-    </ClerkProvider>
-  </StrictMode>
+  // <StrictMode>
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+    <RouterProvider router={router} />
+    {/* <Toaster /> */}
+  </ClerkProvider>
+  // </StrictMode>
 );
