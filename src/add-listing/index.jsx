@@ -106,6 +106,7 @@ function AddListing() {
         .returning({ id: CarListing.id });
       // setTriggerUploadImages(result[0]?.id);
       setLoader(false);
+      z;
       navigate("/profile");
     } else {
       try {
@@ -115,6 +116,8 @@ function AddListing() {
             ...formData,
             features: featuresData,
             createdBy: user?.primaryEmailAddress?.emailAddress,
+            userName: user?.fullName,
+            userImageUrl: user?.imageUrl,
             // postedOn: moment().format("DD/MM/yyyy"),
             postedOn: Intl.DateTimeFormat("en-US", {
               day: "2-digit",

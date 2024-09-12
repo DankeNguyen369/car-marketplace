@@ -25,6 +25,10 @@ export const CarListing = pgTable("carListing", {
   listingDescription: varchar("listingDescription").notNull(),
   features: json("features"),
   createdBy: varchar("createdBy").notNull().default("dankenguyen@email.test"),
+  userName: varchar("userName").notNull().default("Danke"),
+  userImageUrl: varchar("userImageUrl").default(
+    "https://cdn-icons-png.flaticon.com/128/3135/3135715.png"
+  ),
   postedOn: varchar("postedOn"),
 });
 
