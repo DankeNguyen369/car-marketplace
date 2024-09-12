@@ -1,4 +1,4 @@
-import { UserButton, useUser } from "@clerk/clerk-react";
+import { SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 import React from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
@@ -30,7 +30,12 @@ function Header() {
           </Link>
         </div>
       ) : (
-        <Button>Submit Listing</Button>
+        <div className="flex items-center gap-5">
+          <SignInButton mode="modal" forceRedirectUrl="/">
+            <Button>Sign In</Button>
+          </SignInButton>
+          <Button>Submit Listing</Button>
+        </div>
       )}
     </div>
   );

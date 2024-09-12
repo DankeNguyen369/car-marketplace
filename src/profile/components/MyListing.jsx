@@ -28,7 +28,7 @@ function MyListing() {
     // console.log(resp);
     setCarList(resp);
   };
-  console.log(carList);
+  // console.log(carList);
 
   return (
     <div className="mt-6">
